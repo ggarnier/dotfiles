@@ -1,0 +1,56 @@
+# Sets the prefix to C-a, unbinds C-b
+set -g prefix C-a
+unbind C-b
+bind C-a send-prefix
+
+# Toggles synchronize panes
+#bind C-s set-window-option synchronize-panes
+bind C-s setw synchronize-panes
+
+# Sets the delay between prefix and command
+set -s escape-time 1
+
+# Sets base index for windows and panes to 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# Reloads configuration file with prefix r
+bind r source-file ~/.tmux.conf \; display "Reloaded!"
+
+# Configures status bar - https://gist.github.com/zolrath/2305333
+#set -g status-left "#[fg=black]#S #[fg=yellow]#I #[fg=cyan]#P"
+#set -g status-right ""
+set -g status-left-length 32
+set -g status-right-length 150
+set -g status-fg white
+set -g status-bg colour234
+set -g window-status-activity-attr bold
+set -g pane-border-fg colour245
+set -g pane-active-border-fg colour39
+set -g message-fg colour16
+set -g message-bg colour221
+set -g message-attr bold
+set -g status-left '#[fg=colour235,bg=colour252,bold] ❐ #S #[fg=colour238,bg=colour234,nobold]⮀ '
+set -g window-status-format "#[fg=white,bg=colour234] #I #W "
+set -g window-status-current-format "#[fg=colour234,bg=colour39]⮀#[fg=colour25,bg=colour39,noreverse,bold] #I ⮁ #W #[fg=colour39,bg=colour234,nobold]⮀"
+set -g status-right "#(wemux status_users)"
+
+# Sets | and - to add new panes
+bind | split-window -h -c '#{pane_current_path}'
+bind - split-window -v -c '#{pane_current_path}'
+
+# Sets mouse mode
+set-option -g mouse on
+
+# Sets vi mode
+setw -g mode-keys vi
+
+# Sets terminal colors
+set -g default-terminal "screen-256color"
+
+# Enables monitor activities in status bar
+setw -g monitor-activity on
+set -g visual-activity on
+
+# Adds a command to write output to file
+bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
