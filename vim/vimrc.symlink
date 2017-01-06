@@ -1,4 +1,26 @@
-syntax on
+set nocompatible
+filetype off
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let vundle manage vundle
+Plugin 'VundleVim/Vundle.vim'
+
+" list all plugins that you'd like to install here
+Plugin 'ctrlpvim/ctrlp.vim' " fuzzy find files
+Plugin 'scrooloose/nerdtree' " file drawer, open with :NERDTreeToggle
+Plugin 'benmills/vimux'
+Plugin 'tpope/vim-fugitive' " the ultimate git helper
+Plugin 'tpope/vim-commentary' " comment/uncomment lines with gcc or gc in visual mode
+Plugin 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+
+call vundle#end()
+filetype plugin indent on
+
+set autoread
+set autowrite
+
+syntax on
+set number
+set clipboard=unnamed
