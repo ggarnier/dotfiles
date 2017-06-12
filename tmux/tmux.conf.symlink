@@ -56,3 +56,9 @@ set -g visual-activity on
 
 # Adds a command to write output to file
 bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
+
+bind -n C-k clear-history
+
+# Sets clipboard integration with vim
+set -g default-shell $SHELL
+set -g default-command "reattach-to-user-namespace -l ${SHELL}"
