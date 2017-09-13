@@ -62,3 +62,17 @@ bind -n C-k clear-history
 # Sets clipboard integration with vim
 set -g default-shell $SHELL
 set -g default-command "reattach-to-user-namespace -l ${SHELL}"
+
+# Plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+
+# tmux-recurrect settings
+set -g @resurrect-save-bash-history 'on'
+
+# tmux-continuum settings
+set -g @continuum-save-interval '120'
+
+# Initialize TPM (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
