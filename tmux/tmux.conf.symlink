@@ -1,4 +1,3 @@
-# https://github.com/bodil/tmuxified/blob/master/themes/wemux
 # Sets the prefix to C-a, unbinds C-b
 set -g prefix C-a
 unbind C-b
@@ -18,9 +17,8 @@ setw -g pane-base-index 1
 # Reloads configuration file with prefix r
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
 
+# tmux theme from https://github.com/bodil/tmuxified/blob/master/themes/wemux
 # Configures status bar - https://gist.github.com/zolrath/2305333
-#set -g status-left "#[fg=black]#S #[fg=yellow]#I #[fg=cyan]#P"
-#set -g status-right ""
 set -g status-left-length 32
 set -g status-right-length 150
 set -g status-fg white
@@ -72,7 +70,7 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @resurrect-save-bash-history 'on'
 
 # tmux-continuum settings
-set -g @continuum-save-interval '120'
+set -g @continuum-save-interval '1800'
 
 # Initialize TPM (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
