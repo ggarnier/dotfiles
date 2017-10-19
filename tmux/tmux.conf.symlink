@@ -5,7 +5,7 @@ bind C-a send-prefix
 
 # Toggles synchronize panes
 #bind C-s set-window-option synchronize-panes
-bind C-s setw synchronize-panes
+bind s setw synchronize-panes
 
 # Sets the delay between prefix and command
 set -s escape-time 1
