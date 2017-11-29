@@ -18,7 +18,6 @@ setw -g pane-base-index 1
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
 
 # tmux theme from https://github.com/bodil/tmuxified/blob/master/themes/wemux
-# Configures status bar - https://gist.github.com/zolrath/2305333
 set -g status-left-length 32
 set -g status-right-length 150
 set -g status-fg white
@@ -33,7 +32,15 @@ set -g message-attr bold
 set -g status-left '#[fg=colour235,bg=colour252,bold] ❐ #S #[fg=colour238,bg=colour234,nobold]⮀'
 set -g window-status-format "#[fg=white,bg=colour234]#I #W"
 set -g window-status-current-format "#[fg=colour234,bg=colour39]⮀#[fg=colour25,bg=colour39,noreverse,bold] #I ⮁ #W #[fg=colour39,bg=colour234,nobold]⮀"
-set -g status-right "#(wemux status_users)"
+#set -g status-right "#(wemux status_users)"
+
+# show current tsuru target in status bar
+set -g status-right "#[fg=colour15,bg=colour28,nobold]#(cat $HOME/.tsuru/target)"
+set -g status-interval 60
+
+# active pane normal, other shaded out
+setw -g window-style fg=colour240,bg=colour235
+setw -g window-active-style fg=white,bg=black
 
 # Sets | and - to add new panes
 bind | split-window -h -c '#{pane_current_path}'
