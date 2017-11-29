@@ -1,7 +1,7 @@
-# Sets the prefix to C-a, unbinds C-b
-set -g prefix C-a
+# Sets the prefix to Escape, unbinds C-b
+set -g prefix Escape
 unbind C-b
-bind C-a send-prefix
+bind-key Escape send-prefix
 
 # Toggles synchronize panes
 #bind C-s set-window-option synchronize-panes
