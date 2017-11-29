@@ -4,7 +4,6 @@ unbind C-b
 bind-key Escape send-prefix
 
 # Toggles synchronize panes
-#bind C-s set-window-option synchronize-panes
 bind s setw synchronize-panes
 
 # Sets the delay between prefix and command
@@ -13,6 +12,9 @@ set -s escape-time 1
 # Sets base index for windows and panes to 1
 set -g base-index 1
 setw -g pane-base-index 1
+
+# Renumbers windows when a window is closed
+set -g renumber-windows on
 
 # Reloads configuration file with prefix r
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
@@ -35,8 +37,8 @@ set -g window-status-current-format "#[fg=colour234,bg=colour39]⮀#[fg=colour25
 #set -g status-right "#(wemux status_users)"
 
 # show current tsuru target in status bar
-set -g status-right "#[fg=colour15,bg=colour28,nobold]#(cat $HOME/.tsuru/target)"
-set -g status-interval 60
+set -g status-right "#[fg=colour15,bg=colour28,nobold] #(cat $HOME/.tsuru/target) "
+set -g status-interval 30
 
 # active pane normal, other shaded out
 setw -g window-style fg=colour240,bg=colour235
@@ -60,7 +62,7 @@ setw -g monitor-activity on
 set -g visual-activity on
 
 # Adds a command to write output to file
-bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
+bind P pipe-pane -o "cat >> $HOME/#W-tmux.log" \; display "Toggled logging to $HOME/#W-tmux.log"
 
 bind -n C-k clear-history
 
