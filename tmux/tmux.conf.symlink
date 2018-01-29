@@ -65,7 +65,8 @@ set -g visual-activity on
 # Adds a command to write output to file
 bind P pipe-pane -o "cat >> $HOME/#W-tmux.log" \; display "Toggled logging to $HOME/#W-tmux.log"
 
-bind -n C-k clear-history
+# Clears both screen and history
+bind -n C-k send-keys C-l \; run 'sleep 0.1' \; clear-history
 
 # Sets clipboard integration with vim
 set -g default-shell $SHELL
