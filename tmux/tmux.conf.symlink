@@ -1,7 +1,8 @@
-# Sets the prefix to Escape, unbinds C-b
-set -g prefix Escape
+# Sets the prefix to Home, unbinds C-b
+# Using karabiner-elements to set caps lock to home key: https://pqrs.org/osx/karabiner/index.html
+set -g prefix Home
 unbind C-b
-bind-key Escape send-prefix
+bind-key Home send-prefix
 
 # Toggles synchronize panes
 bind s setw synchronize-panes
