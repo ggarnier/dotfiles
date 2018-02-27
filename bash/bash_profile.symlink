@@ -36,6 +36,9 @@ export PATH=$PATH:$GOPATH/bin
 alias t='tsuru'
 export TSURU=$GOPATH/src/github.com/tsuru/tsuru
 
+# kubernetes
+source <(kubectl completion bash)
+
 # aliases
 alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker rmi $(docker images -f "dangling=true" -q); docker volume rm $(docker volume ls -qf dangling=true)'
 alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport'

@@ -38,7 +38,7 @@ set -g window-status-current-format "#[fg=colour234,bg=colour39]⮀#[fg=colour25
 #set -g status-right "#(wemux status_users)"
 
 # show current tsuru target in status bar
-set -g status-right "#[fg=colour15,bg=colour28,nobold] #(cat $HOME/.tsuru/target) "
+set -g status-right "#[fg=colour15,bg=colour67,nobold] kube #(kubectl config current-context) #[fg=colour15,bg=colour28,nobold] #(cat $HOME/.tsuru/target) "
 set -g status-interval 30
 
 # active pane normal, other shaded out
