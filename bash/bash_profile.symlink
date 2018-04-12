@@ -37,6 +37,7 @@ alias t='tsuru'
 export TSURU=$GOPATH/src/github.com/tsuru/tsuru
 
 # kubernetes
+alias k='kubectl'
 source <(kubectl completion bash)
 
 # ripgrep
