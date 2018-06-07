@@ -1,5 +1,32 @@
-# linuxbrew
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+case "$(uname -s)" in
+  Linux)
+    # linuxbrew
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+    # itau - https://hub.docker.com/r/lichti/warsaw-browser/
+    alias itau="warsaw-browser itau"
+    function warsaw-browser {
+      xhost +"local:root"
+      docker run -it --rm \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -v $HOME/ArquivosDoBanco:/home/bank/Downloads \
+        -e DISPLAY=unix$DISPLAY \
+        --name warsaw-browser \
+        lichti/warsaw-browser $1;
+    }
+    ;;
+
+  Darwin)
+    alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport'
+    alias pdfjoin='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
+
+    # Mongodb service
+    # http://www.mongodbspain.com/en/2016/02/15/how-to-launch-mongodb-while-our-mac-osx-starts/
+    # https://gist.github.com/subfuzion/9630872
+    sudo launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+    sudo launchctl start homebrew.mxcl.mongodb.mongod
+    ;;
+esac
 
 # android sdk
 #export ANDROID_HOME=${HOME}/Library/Android/sdk
@@ -48,14 +75,6 @@ export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
 # aliases
 alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker rmi $(docker images -f "dangling=true" -q); docker volume rm $(docker volume ls -qf dangling=true)'
-#alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport'
-#alias pdfjoin='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
-
-# Mongodb service
-# http://www.mongodbspain.com/en/2016/02/15/how-to-launch-mongodb-while-our-mac-osx-starts/
-# https://gist.github.com/subfuzion/9630872
-#sudo launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
-#sudo launchctl start homebrew.mxcl.mongodb.mongod
 
 # rvm
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
