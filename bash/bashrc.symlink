@@ -42,6 +42,8 @@ case "$(uname -s)" in
     ;;
 esac
 
+export EDITOR=nvim
+
 # android sdk
 #export ANDROID_HOME=${HOME}/Library/Android/sdk
 #export PATH=${PATH}:${ANDROID_HOME}/tools
@@ -68,9 +70,9 @@ parse_kube_ctx() {
 }
 export CLICOLOR=true
 export PS1="\[\033[33;1m\]\w\[\033[m\]\[\e[1;32m\]\$(__git_ps1) \[\033[m\]\n\$ "
-export LSCOLORS=GxFxBxDxCxegedabagacad
-
-#[[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
+export LS_OPTIONS="--color=auto"
+eval "$(dircolors -b)"
+alias ls="ls $LS_OPTIONS"
 
 # go
 export GOPATH=$HOME/dev/go
@@ -83,9 +85,18 @@ export T=$GOPATH/src/github.com/tsuru/tsuru
 # kubernetes
 alias k='kubectl'
 source <(kubectl completion bash)
+alias kevt='kubectl get events --all-namespaces --sort-by='\''{.lastTimestamp}'\'''
 
 # ripgrep
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+
+# pyenv
+if which pyenv > /dev/null; then
+  eval "$(pyenv init -)"
+  if which pyenv-virtualenv-init > /dev/null; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+fi
 
 # aliases
 alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker rmi $(docker images -f "dangling=true" -q); docker volume rm $(docker volume ls -qf dangling=true)'
