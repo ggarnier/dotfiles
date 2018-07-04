@@ -14,6 +14,20 @@ case "$(uname -s)" in
         --name warsaw-browser \
         lichti/warsaw-browser $1;
     }
+
+    function pdfjoin {
+      if [ $# -lt 3 ]; then
+        echo "3 or more arguments required"
+        return
+      fi
+      outfile=$1
+      shift 1
+      infiles=$@
+      gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$outfile $infiles
+    }
+
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
     ;;
 
   Darwin)
