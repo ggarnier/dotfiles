@@ -21,7 +21,7 @@
 [core]
         excludesfile = ~/.gitignore
         editor = nvim
-        pager = `brew --prefix git`/share/git-core/contrib/diff-highlight/diff-highlight | less
+        pager = diff-so-fancy | less --tabs=4 -RFX
 [apply]
         whitespace = nowarn
 [mergetool]
@@ -69,8 +69,6 @@
         compactionHeuristic = true
         algorithm = patience
 [pager]
-        log = `brew --prefix git`/share/git-core/contrib/diff-highlight/diff-highlight | less
-        show = `brew --prefix git`/share/git-core/contrib/diff-highlight/diff-highlight | less
-        diff = `brew --prefix git`/share/git-core/contrib/diff-highlight/diff-highlight | less
-[interactive]
-        diffFilter = `brew --prefix git`/share/git-core/contrib/diff-highlight/diff-highlight
+        log = diff-so-fancy | less --tabs=4 -RFX
+        show = diff-so-fancy | less --tabs=4 -RFX
+        diff = diff-so-fancy | less --tabs=4 -RFX

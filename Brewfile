@@ -8,6 +8,7 @@ brew 'cmake'
 brew 'colordiff'
 brew 'ctop'
 brew 'curl', args: ['with-nghttp2']
+brew 'diff-so-fancy'
 brew 'fd'
 brew 'ffmpeg'
 brew 'git'
