@@ -20,10 +20,13 @@ case "$(uname -s)" in
         echo "3 or more arguments required"
         return
       fi
-      outfile=$1
+      outfile="\"${1}\""
       shift 1
-      infiles=$@
-      gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$outfile $infiles
+      infiles=""
+      for f in "$@"; do
+        infiles=`echo -n "$infiles" "${f}"`
+      done
+      gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$outfile" $infiles
     }
 
     alias pbcopy='xsel --clipboard --input'
@@ -73,6 +76,10 @@ export PS1="\[\033[33;1m\]\w\[\033[m\]\[\e[1;32m\]\$(__git_ps1) \[\033[m\]\n\$ "
 export LS_OPTIONS="--color=auto"
 eval "$(dircolors -b)"
 alias ls="ls $LS_OPTIONS"
+alias ll="ls -la"
+alias cat="bat"
+alias vi="nvim"
+alias vim="nvim"
 
 # go
 export GOPATH=$HOME/dev/go
@@ -83,7 +90,7 @@ alias t='tsuru'
 export T=$GOPATH/src/github.com/tsuru/tsuru
 
 # kubernetes
-alias k='kubectl'
+alias k='/snap/bin/kubectl'
 source <(kubectl completion bash)
 alias kevt='kubectl get events --all-namespaces --sort-by='\''{.lastTimestamp}'\'''
 
@@ -109,3 +116,5 @@ alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker
 #if [ -f "$HOME/dev/google-cloud-sdk/path.bash.inc" ]; then source "$HOME/dev/google-cloud-sdk/path.bash.inc"; fi
 # The next line enables shell command completion for gcloud.
 #if [ -f "$HOME/dev/google-cloud-sdk/completion.bash.inc" ]; then source "$HOME/dev/google-cloud-sdk/completion.bash.inc"; fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
