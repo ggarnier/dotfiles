@@ -37,8 +37,8 @@ set -g window-status-format "#[fg=white,bg=colour234]#I #W"
 set -g window-status-current-format "#[fg=colour234,bg=colour39]#[fg=colour25,bg=colour39,noreverse,bold] #I  #W #[fg=colour39,bg=colour234,nobold]"
 
 # show current tsuru target in status bar
-set -g status-right "#[bg=colour159] #(/bin/bash ~/dev/kube-tmux/kube.tmux 250 red cyan) #[fg=colour15,bg=colour28,nobold] ☁️  #(cat $HOME/.tsuru/target) "
-set -g status-interval 30
+#set -g status-right "#[bg=colour159] #(/bin/bash ~/dev/kube-tmux/kube.tmux 250 red cyan) "
+#set -g status-interval 30
 
 # active pane normal, other shaded out
 setw -g window-style fg=colour240,bg=colour235
@@ -50,9 +50,9 @@ bind - split-window -v -c '#{pane_current_path}'
 
 # Sets mouse mode
 set-option -g mouse on
-set-option -g mouse-select-pane on
-set-option -g mouse-resize-pane on
-set-option -g mouse-select-window on
+#set-option -g mouse-select-pane on
+#set-option -g mouse-resize-pane on
+#set-option -g mouse-select-window on
 
 # Sets vi mode
 setw -g mode-keys vi
@@ -79,6 +79,7 @@ set -g default-shell $SHELL
 #set -g default-command "reattach-to-user-namespace -l ${SHELL}"
 # Linux - requires xsel
 bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xsel -i --clipboard"
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xsel -i --clipboard"
 
 # Plugins
 #set -g @plugin 'tmux-plugins/tpm'
