@@ -46,6 +46,7 @@ case "$(uname -s)" in
 esac
 
 export EDITOR=nvim
+export TMPDIR="/tmp"
 
 # android sdk
 #export ANDROID_HOME=${HOME}/Library/Android/sdk
@@ -65,36 +66,66 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export HISTCONTROL=ignoredups
 
 # prompt
-parse_tsuru_target() {
-    tsuru target-list 2> /dev/null | grep '\*' | awk '{print $3}'
-}
 parse_kube_ctx() {
     kubectl config current-context 2> /dev/null | awk '{print "("$0")"}'
 }
 export CLICOLOR=true
-export PS1="\[\033[33;1m\]\w\[\033[m\]\[\e[1;32m\]\$(__git_ps1) \[\033[m\]\n\$ "
+source ~/bin/git-prompt.sh
+
+gitup() {
+  CURRENT_BRANCH=`git branch | grep \* | cut -d ' ' -f2`
+  if [ "$CURRENT_BRANCH" != "master" ]; then
+    git checkout master && git pull origin master && GITUP_CMD="git branch -D $CURRENT_BRANCH" && echo "$GITUP_CMD" && echo "$GITUP_CMD" | pbcopy
+  fi
+}
+
+# node & nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+__node_version() {
+  echo "node $(nvm current)"
+}
+
+__no_version() {
+  if hash node 2>/dev/null; then
+    local v=$(node -v)
+  fi
+  [ "$v" != "" ] && echo "node ${v:1}"
+}
+
+
+export PS1="\$? \[\033[33;1m\]\w\[\033[m\]\[\e[1;32m\]\$(__git_ps1)\[\033[m\]\n\$ "
 export LS_OPTIONS="--color=auto"
 eval "$(dircolors -b)"
+
 alias ls="ls $LS_OPTIONS"
 alias ll="ls -la"
-alias cat="bat"
 alias vi="nvim"
 alias vim="nvim"
 
-# go
-export GOPATH=$HOME/dev/go
-export PATH=$PATH:$GOPATH/bin
-
-# tsuru
-alias t='tsuru'
-export T=$GOPATH/src/github.com/tsuru/tsuru
-
 # kubernetes
-alias k='/snap/bin/kubectl'
 source <(kubectl completion bash)
+alias k='kubectl'
+alias kd='kubectl describe'
+complete -F __start_kubectl k
 alias kevt='kubectl get events --all-namespaces --sort-by='\''{.lastTimestamp}'\'''
+function kapp {
+  tmpfile=`mktemp`
+  kubectl get all -l app=$@ > $tmpfile 2>&1
+  if [[ `cat $tmpfile` == "No resources found." ]]; then
+    kubectl get all -l name=$@
+  else
+    cat $tmpfile
+  fi
+  rm -f $tmpfile
+}
 
 # ripgrep
+alias rg='ripgrep.rg'
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
 # pyenv
@@ -105,16 +136,27 @@ if which pyenv > /dev/null; then
   fi
 fi
 
-# aliases
+# docker
 alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker rmi $(docker images -f "dangling=true" -q); docker volume rm $(docker volume ls -qf dangling=true)'
+
+dr() {
+  docker run -it --rm -u 1000:1000 -v "$PWD":/app -w /app $@
+}
+imagemagick() {
+  dr jess/imagemagick $@
+}
+
+# import secrets
+[ -s "$HOME/.secrets" ] && . "$HOME/.secrets"
 
 # rvm
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # google cloud
 # The next line updates PATH for the Google Cloud SDK.
-#if [ -f "$HOME/dev/google-cloud-sdk/path.bash.inc" ]; then source "$HOME/dev/google-cloud-sdk/path.bash.inc"; fi
+if [ -f '/home/ggarnier/dev/google-cloud-sdk/path.bash.inc' ]; then . '/home/ggarnier/dev/google-cloud-sdk/path.bash.inc'; fi
+
 # The next line enables shell command completion for gcloud.
-#if [ -f "$HOME/dev/google-cloud-sdk/completion.bash.inc" ]; then source "$HOME/dev/google-cloud-sdk/completion.bash.inc"; fi
+if [ -f '/home/ggarnier/dev/google-cloud-sdk/completion.bash.inc' ]; then . '/home/ggarnier/dev/google-cloud-sdk/completion.bash.inc'; fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
