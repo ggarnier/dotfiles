@@ -36,9 +36,8 @@ set -g status-left '#[fg=colour235,bg=colour252,bold] ❐ #S #[fg=colour238,bg=c
 set -g window-status-format "#[fg=white,bg=colour234]#I #W"
 set -g window-status-current-format "#[fg=colour234,bg=colour39]#[fg=colour25,bg=colour39,noreverse,bold] #I  #W #[fg=colour39,bg=colour234,nobold]"
 
-# show current tsuru target in status bar
-#set -g status-right "#[bg=colour159] #(/bin/bash ~/dev/kube-tmux/kube.tmux 250 red cyan) "
-#set -g status-interval 30
+set -g status-right "#[fg=colour32,bg=colour159] #(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null) "
+set -g status-interval 30
 
 # active pane normal, other shaded out
 setw -g window-style fg=colour240,bg=colour235
