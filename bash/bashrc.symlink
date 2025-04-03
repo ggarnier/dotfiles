@@ -3,9 +3,6 @@ export LC_ALL=en_US.UTF-8
 
 case "$(uname -s)" in
   Linux)
-    # linuxbrew
-    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-
     # itau - https://hub.docker.com/r/lichti/warsaw-browser/
     alias itau="warsaw-browser itau"
     function warsaw-browser {
@@ -51,16 +48,6 @@ esac
 export EDITOR=nvim
 export TMPDIR="/tmp"
 
-# android sdk
-#export ANDROID_HOME=${HOME}/Library/Android/sdk
-#export PATH=${PATH}:${ANDROID_HOME}/tools
-#export PATH=${PATH}:${ANDROID_HOME}/platform-tools
-
-# bash completion
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
-fi
-
 # history
 export HISTCONTROL=erasedups
 export HISTSIZE=99999999999999999999999999999999999999999999999
@@ -73,32 +60,19 @@ parse_kube_ctx() {
     kubectl config current-context 2> /dev/null | awk '{print "("$0")"}'
 }
 export CLICOLOR=true
-if [ -f "/home/linuxbrew/.linuxbrew/opt/bash-git-prompt/share/gitprompt.sh" ]; then
-  __GIT_PROMPT_DIR="/home/linuxbrew/.linuxbrew/opt/bash-git-prompt/share"
-  source "/home/linuxbrew/.linuxbrew/opt/bash-git-prompt/share/gitprompt.sh"
+
+# bash-git-prompt: https://github.com/magicmonty/bash-git-prompt
+if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+  GIT_PROMPT_ONLY_IN_REPO=1
+  source $HOME/.bash-git-prompt/gitprompt.sh
 fi
 
 gitup() {
   CURRENT_BRANCH=`git branch | grep \* | cut -d ' ' -f2`
-  if [ "$CURRENT_BRANCH" != "master" ]; then
-    git checkout master && git pull origin master && GITUP_CMD="git branch -D $CURRENT_BRANCH" && echo "$GITUP_CMD" && echo "$GITUP_CMD" | pbcopy
+  if [ "$CURRENT_BRANCH" != "main" ]; then
+    git checkout main && git pull origin main && GITUP_CMD="git branch -D $CURRENT_BRANCH" && echo "$GITUP_CMD" && echo "$GITUP_CMD" | pbcopy
   fi
 }
-
-# node & yarn
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-__node_version() {
-  echo "node $(nvm current)"
-}
-
-__no_version() {
-  if hash node 2>/dev/null; then
-    local v=$(node -v)
-  fi
-  [ "$v" != "" ] && echo "node ${v:1}"
-}
-
 
 export LS_OPTIONS="--color=auto"
 eval "$(dircolors -b)"
@@ -128,19 +102,15 @@ function kapp {
   rm -f $tmpfile
 }
 
+alias pnx="pnpm nx"
+
 # ripgrep
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
-# pyenv
-if which pyenv > /dev/null; then
-  eval "$(pyenv init -)"
-  if which pyenv-virtualenv-init > /dev/null; then
-    eval "$(pyenv virtualenv-init -)"
-  fi
-fi
-
 # docker
 alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker rmi $(docker images -f "dangling=true" -q); docker volume rm $(docker volume ls -qf dangling=true)'
+# dive - https://github.com/wagoodman/dive
+alias dive="docker run -ti --rm  -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive"
 
 dr() {
   docker run -it --rm -u 1000:1000 -v "$PWD":/app -w /app $@
@@ -152,18 +122,20 @@ imagemagick() {
 # import secrets
 [ -s "$HOME/.secrets" ] && . "$HOME/.secrets"
 
-# rvm
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# fzf
+[ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
 
-# google cloud
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/ggarnier/dev/google-cloud-sdk/path.bash.inc' ]; then . '/home/ggarnier/dev/google-cloud-sdk/path.bash.inc'; fi
+# asdf
+export PATH="$HOME/.asdf/shims:$GOBIN:$HOME/bin:$PATH"
+. <(asdf completion bash)
+[ -f "$HOME/.asdf/plugins/golang/set-env.bash" ] && . ~/.asdf/plugins/golang/set-env.bash
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/ggarnier/dev/google-cloud-sdk/completion.bash.inc' ]; then . '/home/ggarnier/dev/google-cloud-sdk/completion.bash.inc'; fi
+# https://jusbrasil.slack.com/archives/C024ZJBMU/p1732907781236309
+alias lgtm="curl -s 'https://us-central1-lgtm-reloaded.cloudfunctions.net/lgtm' | jq -r '.markdown' | grep -v 'Powered By GIPHY' | pbcopy && echo LGTM copied"
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# Example usage of comparing output of two ls commands$ diff -u <(ls -l /directory/) <(ls -l /directory/) | colordiff
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/ggarnier/.sdkman"
-[[ -s "/home/ggarnier/.sdkman/bin/sdkman-init.sh" ]] && source "/home/ggarnier/.sdkman/bin/sdkman-init.sh"
+#export SDKMAN_DIR="/home/ggarnier/.sdkman"
+#[[ -s "/home/ggarnier/.sdkman/bin/sdkman-init.sh" ]] && source "/home/ggarnier/.sdkman/bin/sdkman-init.sh"
+source "/home/ggarnier/.rover/env"

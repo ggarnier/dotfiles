@@ -78,3 +78,7 @@
         diff = diff-so-fancy | less --tabs=4 -RFX
 [remote "origin"]
 	prune = true
+[user]
+	name = Guilherme Garnier
+[init]
+	defaultBranch = main
