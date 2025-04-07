@@ -135,7 +135,6 @@ alias lgtm="curl -s 'https://us-central1-lgtm-reloaded.cloudfunctions.net/lgtm' 
 
 # Example usage of comparing output of two ls commands$ diff -u <(ls -l /directory/) <(ls -l /directory/) | colordiff
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-#export SDKMAN_DIR="/home/ggarnier/.sdkman"
-#[[ -s "/home/ggarnier/.sdkman/bin/sdkman-init.sh" ]] && source "/home/ggarnier/.sdkman/bin/sdkman-init.sh"
-source "/home/ggarnier/.rover/env"
+. "/home/ggarnier/.config/jus-cli/init_bash.sh"
+
+. "/home/ggarnier/.config/jus-cli/completion_bash.sh"
