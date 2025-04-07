@@ -6,9 +6,25 @@ set -e
 
 cd "$(dirname $0)"/..
 
-# Run Homebrew through the Brewfile
-echo "› brew bundle"
-brew bundle
+case "$(uname -s)" in
+  Linux)
+    if [ -e "Aptfile" ]; then
+      echo "› apt install"
+      sudo apt update && sudo apt install -y $(cat Aptfile)
+    fi
+
+    if [ -e "Snapfile" ]; then
+      echo "› snap install"
+      sudo snap install $(cat Snapfile)
+    fi
+    ;;
+
+  Darwin)
+    # Run Homebrew through the Brewfile
+    echo "› brew bundle"
+    brew bundle
+    ;;
+esac
 
 # find the installers and run them iteratively
 find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
