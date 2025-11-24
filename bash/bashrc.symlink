@@ -101,6 +101,8 @@ function kapp {
   fi
   rm -f $tmpfile
 }
+# kubectl krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 alias pnx="pnpm nx"
 
@@ -111,6 +113,7 @@ export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 alias docker-cleanup='docker rm $(docker ps --filter "status=exited" -q); docker rmi $(docker images -f "dangling=true" -q); docker volume rm $(docker volume ls -qf dangling=true)'
 # dive - https://github.com/wagoodman/dive
 alias dive="docker run -ti --rm  -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive"
+export DOCKER_HOST_INTERNAL=host.docker.internal:host-gateway
 
 dr() {
   docker run -it --rm -u 1000:1000 -v "$PWD":/app -w /app $@
@@ -118,6 +121,15 @@ dr() {
 imagemagick() {
   dr jess/imagemagick $@
 }
+pdf2png() {
+  file=$1
+  basefilename=${file%.*}
+  imagemagick convert -density 300 $file -quality 90 $basefilename.png
+}
+
+alias psql="docker run -ti --rm alpine/psql"
+
+alias cursor='cursor --use-inmemory-secretstorage --no-sandbox'
 
 # import secrets
 [ -s "$HOME/.secrets" ] && . "$HOME/.secrets"
@@ -128,7 +140,8 @@ imagemagick() {
 # asdf
 export PATH="$HOME/.asdf/shims:$GOBIN:$HOME/bin:$PATH"
 . <(asdf completion bash)
-[ -f "$HOME/.asdf/plugins/golang/set-env.bash" ] && . ~/.asdf/plugins/golang/set-env.bash
+#[ -f "$HOME/.asdf/plugins/golang/set-env.bash" ] && . ~/.asdf/plugins/golang/set-env.bash
+. ${ASDF_DATA_DIR:-$HOME/.asdf}/plugins/golang/set-env.bash
 
 # https://jusbrasil.slack.com/archives/C024ZJBMU/p1732907781236309
 alias lgtm="curl -s 'https://us-central1-lgtm-reloaded.cloudfunctions.net/lgtm' | jq -r '.markdown' | grep -v 'Powered By GIPHY' | pbcopy && echo LGTM copied"
